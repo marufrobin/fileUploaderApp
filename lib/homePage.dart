@@ -40,16 +40,16 @@ class HomePage extends StatelessWidget {
             )),
           ),
           Container(
-            height: height * 0.7,
+            height: height * 0.72,
             width: width,
             child: ListView.builder(
               itemCount: 10,
               scrollDirection: Axis.vertical,
-              physics: BouncingScrollPhysics(),
+              physics: const BouncingScrollPhysics(),
               itemBuilder: (context, index) => Container(
                 decoration: BoxDecoration(
                     color: kListColor, borderRadius: BorderRadius.circular(10)),
-                margin: EdgeInsets.all(4),
+                margin: const EdgeInsets.all(4),
                 child: ListTile(
                   title: Text(
                     "Music $index",
