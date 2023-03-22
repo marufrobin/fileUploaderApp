@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:uploader_app/utils/constant.dart';
 import 'package:uploader_app/utils/filePicker.dart';
@@ -10,6 +12,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  List fileInfo = [];
   @override
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
@@ -37,8 +40,13 @@ class _HomePageState extends State<HomePage> {
             child: MaterialButton(
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(16)),
-              onPressed: () {
-                pickASingleFile();
+              onPressed: () async {
+                setState(() {});
+                fileInfo.add(await pickASingleFile());
+
+                setState(() {});
+
+                print(fileInfo);
               },
               child: Center(
                   child: RichText(
@@ -58,7 +66,7 @@ class _HomePageState extends State<HomePage> {
             height: height * 0.72,
             width: width,
             child: ListView.builder(
-              itemCount: 10,
+              itemCount: fileInfo.length,
               scrollDirection: Axis.vertical,
               physics: const BouncingScrollPhysics(),
               itemBuilder: (context, index) => Container(
@@ -67,13 +75,14 @@ class _HomePageState extends State<HomePage> {
                 margin: const EdgeInsets.all(4),
                 child: ListTile(
                   title: Text(
-                    "Music $index",
+                    "${fileInfo[index]["name"]}",
                     style: TextStyle(color: Colors.white),
                   ),
                   subtitle: Text(
-                    "12Mb",
+                    "${fileInfo[index]["size"] / 1000} kb",
                     style: TextStyle(color: Colors.grey),
                   ),
+                  leading: Image.file(File(fileInfo[index]["path"])),
                 ),
               ),
             ),
