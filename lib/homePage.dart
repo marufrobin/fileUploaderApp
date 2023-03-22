@@ -1,9 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:uploader_app/utils/constant.dart';
+import 'package:uploader_app/utils/filePicker.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   HomePage({Key? key}) : super(key: key);
 
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
@@ -19,6 +25,7 @@ class HomePage extends StatelessWidget {
         centerTitle: true,
       ),
       body: Container(
+        color: Colors.transparent,
         child: Column(children: [
           Container(
             height: height * 0.1,
@@ -27,17 +34,25 @@ class HomePage extends StatelessWidget {
             decoration: BoxDecoration(
                 color: Color(0xfff1f0ef),
                 borderRadius: BorderRadius.circular(16)),
-            child: Center(
-                child: RichText(
-              text: const TextSpan(
-                  text: "Drag & Drop your files or ",
-                  style: TextStyle(color: Color(0xffA7A6A5), fontSize: 16),
-                  children: [
-                    TextSpan(
-                        text: "Browse",
-                        style: TextStyle(decoration: TextDecoration.underline))
-                  ]),
-            )),
+            child: MaterialButton(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16)),
+              onPressed: () {
+                pickASingleFile();
+              },
+              child: Center(
+                  child: RichText(
+                text: const TextSpan(
+                    text: "Drag & Drop your files or ",
+                    style: TextStyle(color: Color(0xffA7A6A5), fontSize: 16),
+                    children: [
+                      TextSpan(
+                          text: "Browse",
+                          style:
+                              TextStyle(decoration: TextDecoration.underline))
+                    ]),
+              )),
+            ),
           ),
           Container(
             height: height * 0.72,
