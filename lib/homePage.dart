@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:uploader_app/appConfig/customHttp.dart';
 import 'package:uploader_app/utils/constant.dart';
 import 'package:uploader_app/utils/filePicker.dart';
 
@@ -63,7 +64,7 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
           Container(
-            height: height * 0.72,
+            height: height * 0.6,
             width: width,
             child: ListView.builder(
               itemCount: fileInfo.length,
@@ -78,15 +79,22 @@ class _HomePageState extends State<HomePage> {
                     "${fileInfo[index]["name"]}",
                     style: TextStyle(color: Colors.white),
                   ),
-                  subtitle: Text(
+                  /* subtitle: Text(
                     "${fileInfo[index]["size"] / 1000} kb",
                     style: TextStyle(color: Colors.grey),
-                  ),
+                  ),*/
                   leading: Image.file(File(fileInfo[index]["path"])),
+                  trailing: IconButton(
+                      onPressed: () async {
+                        await CustomHttp.uploadFile(
+                            fileInfo[index]["path"], "robin1");
+                        print(fileInfo[index]["path"].toString());
+                      },
+                      icon: Icon(Icons.upload_rounded)),
                 ),
               ),
             ),
-          )
+          ),
         ]),
       ),
     );
