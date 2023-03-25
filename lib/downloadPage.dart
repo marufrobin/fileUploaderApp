@@ -97,6 +97,12 @@ class _DownloadPageState extends State<DownloadPage> {
                   print("File name after:$imageName");
 
                   downloadFile();
+                  receivePort.listen((message) {
+                    setState(() {
+                      progress = message;
+                      print("progress : $progress");
+                    });
+                  });
                 });
                 ;
               },
