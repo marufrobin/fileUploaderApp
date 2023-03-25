@@ -5,14 +5,14 @@ import 'package:uploader_app/appConfig/customHttp.dart';
 import 'package:uploader_app/utils/constant.dart';
 import 'package:uploader_app/utils/filePicker.dart';
 
-class HomePage extends StatefulWidget {
-  HomePage({Key? key}) : super(key: key);
+class UploadPage extends StatefulWidget {
+  UploadPage({Key? key}) : super(key: key);
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<UploadPage> createState() => _UploadPageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _UploadPageState extends State<UploadPage> {
   List fileInfo = [];
   @override
   Widget build(BuildContext context) {
@@ -66,34 +66,37 @@ class _HomePageState extends State<HomePage> {
           Container(
             height: height * 0.6,
             width: width,
-            child: ListView.builder(
-              itemCount: fileInfo.length,
-              scrollDirection: Axis.vertical,
-              physics: const BouncingScrollPhysics(),
-              itemBuilder: (context, index) => Container(
-                decoration: BoxDecoration(
-                    color: kListColor, borderRadius: BorderRadius.circular(10)),
-                margin: const EdgeInsets.all(4),
-                child: ListTile(
-                  title: Text(
-                    "${fileInfo[index]["name"]}",
-                    style: TextStyle(color: Colors.white),
-                  ),
-                  /* subtitle: Text(
+            child: fileInfo.length != null
+                ? ListView.builder(
+                    itemCount: fileInfo.length,
+                    scrollDirection: Axis.vertical,
+                    physics: const BouncingScrollPhysics(),
+                    itemBuilder: (context, index) => Container(
+                      decoration: BoxDecoration(
+                          color: kListColor,
+                          borderRadius: BorderRadius.circular(10)),
+                      margin: const EdgeInsets.all(4),
+                      child: ListTile(
+                        title: Text(
+                          "${fileInfo[index]["name"]}",
+                          style: TextStyle(color: Colors.white),
+                        ),
+                        /* subtitle: Text(
                     "${fileInfo[index]["size"] / 1000} kb",
                     style: TextStyle(color: Colors.grey),
                   ),*/
-                  leading: Image.file(File(fileInfo[index]["path"])),
-                  trailing: IconButton(
-                      onPressed: () async {
-                        await CustomHttp.uploadFile(
-                            fileInfo[index]["path"], "robin1");
-                        print(fileInfo[index]["path"].toString());
-                      },
-                      icon: Icon(Icons.upload_rounded)),
-                ),
-              ),
-            ),
+                        leading: Image.file(File(fileInfo[index]["path"])),
+                        trailing: IconButton(
+                            onPressed: () async {
+                              await CustomHttp.uploadFile(
+                                  fileInfo[index]["path"], "robin1");
+                              print(fileInfo[index]["path"].toString());
+                            },
+                            icon: Icon(Icons.upload_rounded)),
+                      ),
+                    ),
+                  )
+                : null,
           ),
         ]),
       ),

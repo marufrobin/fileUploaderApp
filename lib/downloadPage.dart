@@ -15,16 +15,15 @@ class DownloadPage extends StatefulWidget {
 
 class _DownloadPageState extends State<DownloadPage> {
   TextEditingController textEditingController = TextEditingController();
-  String imageUrl =
-      "https://res.cloudinary.com/djwjyopfv/image/upload/v1679665851/client-demo/ftaolsdv3fg2ukwzppjj.jpg";
+  String? imageUrl;
   downloadFile() async {
     final status = await Permission.storage.request();
     if (status.isGranted) {
       final baseStorage = await getExternalStorageDirectory();
       final id = await FlutterDownloader.enqueue(
-        url: imageUrl,
+        url: imageUrl!,
         savedDir: baseStorage!.path,
-        fileName: "image-1",
+        fileName: imageName,
       );
     } else {
       print("no Permission given for storage");
@@ -44,6 +43,7 @@ class _DownloadPageState extends State<DownloadPage> {
     receivePort.listen((message) {
       setState(() {
         progress = message;
+        print("progress : $progress");
       });
     });
     super.initState();
@@ -85,14 +85,17 @@ class _DownloadPageState extends State<DownloadPage> {
           ),
           OutlinedButton(
               onPressed: () {
-                // downloadFile();
-                List<String> parts = imageUrl.split("/");
                 setState(() {
+                  imageUrl = textEditingController.text;
+                  List<String> parts = imageUrl!.split("/");
+
                   imageName = parts.last;
+                  downloadFile();
                 });
+                ;
               },
               child: Text("DownLoad")),
-          Text("Progress: $imageName"),
+          Text("Progress: $progress"),
         ]),
       ),
     );
