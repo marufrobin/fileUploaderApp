@@ -88,8 +88,14 @@ class _DownloadPageState extends State<DownloadPage> {
                 setState(() {
                   imageUrl = textEditingController.text;
                   List<String> parts = imageUrl!.split("/");
+                  print("File name before:$imageName");
+                  if (imageName == parts.last) {
+                    imageName = parts.last;
+                  } else {
+                    imageName = "${parts.last}1";
+                  }
+                  print("File name after:$imageName");
 
-                  imageName = parts.last;
                   downloadFile();
                 });
                 ;
