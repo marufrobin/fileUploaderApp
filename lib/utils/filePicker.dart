@@ -1,14 +1,11 @@
-import 'dart:io';
-
-import 'package:file_picker/file_picker.dart';
-import 'package:flutter/foundation.dart';
-
+/*
 pickASingleFile() async {
   Map<String, dynamic> listOfPickFile;
   FilePickerResult? result =
       await FilePicker.platform.pickFiles(allowMultiple: false);
   if (result != null) {
     File file = File(result.files.single.path!);
+*/
 /*
     if (kDebugMode) {
       print(file.);
@@ -18,7 +15,8 @@ pickASingleFile() async {
       print(file.path);
       print(file.identifier);
       // print(listOfPickFile);
-    }*/
+    }*/ /*
+
     listOfPickFile = {
       // "name": file.name,
       // "size": file.size,
@@ -27,10 +25,15 @@ pickASingleFile() async {
     };
     List fileInfo = [];
     // fileInfo.add(listOfPickFile);
-    return listOfPickFile;
+    if (file.path == null) {
+      return null;
+    } else {
+      return listOfPickFile;
+    }
   } else {
     if (kDebugMode) {
       print("Gowa Mara Kha");
     }
   }
 }
+*/

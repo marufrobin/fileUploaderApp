@@ -7,8 +7,8 @@ import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class DownloadPage extends StatefulWidget {
-  const DownloadPage({Key? key}) : super(key: key);
-
+  DownloadPage({Key? key, this.downloadLink}) : super(key: key);
+  var downloadLink;
   @override
   State<DownloadPage> createState() => _DownloadPageState();
 }
@@ -36,6 +36,7 @@ class _DownloadPageState extends State<DownloadPage> {
   ReceivePort receivePort = ReceivePort();
   @override
   void initState() {
+    textEditingController.text = widget.downloadLink;
     // TODO: implement initState
     IsolateNameServer.registerPortWithName(
         receivePort.sendPort, "downloadFile");
@@ -49,9 +50,17 @@ class _DownloadPageState extends State<DownloadPage> {
     super.initState();
   }
 
+  @pragma('vm:entry-point')
   static downloadCallBack(id, status, progress) {
     SendPort? sendPort = IsolateNameServer.lookupPortByName("downloadFile");
-    sendPort!.send(progress);
+    sendPort!.send(status);
+  }
+
+  @override
+  void dispose() {
+    textEditingController;
+    // TODO: implement dispose
+    super.dispose();
   }
 
   @override
@@ -61,6 +70,12 @@ class _DownloadPageState extends State<DownloadPage> {
 
     return Scaffold(
       appBar: AppBar(
+        leading: BackButton(
+          color: Colors.black,
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
         elevation: 0,
         backgroundColor: Colors.transparent,
         title: Text(
@@ -97,17 +112,17 @@ class _DownloadPageState extends State<DownloadPage> {
                   print("File name after:$imageName");
 
                   downloadFile();
-                  receivePort.listen((message) {
-                    setState(() {
-                      progress = message;
-                      print("progress : $progress");
-                    });
-                  });
                 });
                 ;
+                setState(() {});
               },
               child: Text("DownLoad")),
-          Text("Progress: $progress"),
+          Text("Check the notification For update"),
+
+          // StreamBuilder(
+          //   builder: (context, snapshot) =>
+          //       CircularProgressIndicator(value: progress.toDouble()),
+          // )
         ]),
       ),
     );

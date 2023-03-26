@@ -43,11 +43,6 @@ class HomePage extends StatelessWidget {
                   Navigator.pushNamed(context, '/upload');
                 },
                 child: Text("Upload")),
-            OutlinedButton(
-                onPressed: () {
-                  Navigator.pushNamed(context, "/download");
-                },
-                child: Text("Download")),
           ],
         ),
       ),

@@ -1,6 +1,8 @@
 import 'package:dio/dio.dart';
+import 'package:uploader_app/Model/uploadModel.dart';
 
 class CustomHttp {
+  static UploadModel? uploadModel;
   static uploadFile(String filePath, String fileName) async {
     /*FilePickerResult? result =
         await FilePicker.platform.pickFiles(allowMultiple: false);
@@ -23,7 +25,14 @@ class CustomHttp {
           print("Upload: ${sent}, Total: ${total}");
         },
       );
+
       print("Responce::::${responce}");
+      print("Responce::::${responce.statusCode}");
+      if (responce.statusCode == 200) {
+        uploadModel = UploadModel.fromJson(responce.data);
+        print("UploadModel$uploadModel");
+        return uploadModel;
+      }
     } catch (e) {
       print(e);
     }

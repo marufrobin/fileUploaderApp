@@ -1,9 +1,12 @@
 import 'dart:io';
 
+import 'package:file_picker/file_picker.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:uploader_app/Model/uploadModel.dart';
 import 'package:uploader_app/appConfig/customHttp.dart';
+import 'package:uploader_app/downloadPage.dart';
 import 'package:uploader_app/utils/constant.dart';
-import 'package:uploader_app/utils/filePicker.dart';
 
 class UploadPage extends StatefulWidget {
   UploadPage({Key? key}) : super(key: key);
@@ -13,7 +16,60 @@ class UploadPage extends StatefulWidget {
 }
 
 class _UploadPageState extends State<UploadPage> {
+  List listOfUploaded = [];
+  UploadModel? uploadModel;
+
   List fileInfo = [];
+  bool isDownloadCom = false;
+  pickASingleFile() async {
+    Map<String, dynamic> listOfPickFile;
+    FilePickerResult? result =
+        await FilePicker.platform.pickFiles(allowMultiple: false);
+    print("result: $result");
+
+    if (result != null) {
+      File file = File(result.files.single.path!);
+      print("file Path:${file.path}");
+      // listOfPickFile = {
+      //   "name": file.name,
+      //   "size": file.size,
+      //   "path": file.path,
+      //   "ext": file.extension!
+      // };
+
+      fileInfo.add(file.path);
+      listOfUploaded.add("");
+      setState(() {});
+/*
+    if (kDebugMode) {
+      print(file.);
+      print(file.size);
+      print(file.bytes);
+      print(file.extension);
+      print(file.path);
+      print(file.identifier);
+      // print(listOfPickFile);
+    }*/
+      /* listOfPickFile = {
+        // "name": file.name,
+        // "size": file.size,
+        "path": file.path,
+        // "ext": file.extension!
+      };
+      List fileInfo = [];
+      // fileInfo.add(listOfPickFile);
+      if (file.path == null) {
+        return null;
+      } else {
+        return listOfPickFile;
+      }*/
+    } else {
+      if (kDebugMode) {
+        print("Gowa Mara Kha");
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
@@ -43,8 +99,8 @@ class _UploadPageState extends State<UploadPage> {
                   borderRadius: BorderRadius.circular(16)),
               onPressed: () async {
                 setState(() {});
-                fileInfo.add(await pickASingleFile());
-
+                // fileInfo!.add(await pickASingleFile());
+                pickASingleFile();
                 setState(() {});
 
                 print(fileInfo);
@@ -66,39 +122,76 @@ class _UploadPageState extends State<UploadPage> {
           Container(
             height: height * 0.6,
             width: width,
-            child: fileInfo.length != null
+            child: fileInfo.isEmpty == false
                 ? ListView.builder(
                     itemCount: fileInfo.length,
                     scrollDirection: Axis.vertical,
                     physics: const BouncingScrollPhysics(),
-                    itemBuilder: (context, index) => Container(
-                      decoration: BoxDecoration(
-                          color: kListColor,
-                          borderRadius: BorderRadius.circular(10)),
-                      margin: const EdgeInsets.all(4),
-                      child: ListTile(
-                        title: Text(
-                          "${fileInfo[index]["name"]}",
-                          style: TextStyle(color: Colors.white),
+                    itemBuilder: (context, index) {
+                      print("Index$index");
+                      print("IndeLength ${fileInfo.length}");
+                      // File file = fileInfo[index];
+                      print(fileInfo);
+                      return Container(
+                        decoration: BoxDecoration(
+                            color: kListColor,
+                            borderRadius: BorderRadius.circular(10)),
+                        margin: const EdgeInsets.all(4),
+                        child: ListTile(
+                          title: Text(
+                            "${fileInfo[index].split("/").last}",
+                            style: TextStyle(color: Colors.white),
+                          ),
+                          /*subtitle: Text(
+                            "${(fileInfo[index].lengthSync() / 1024).toStringAsFixed(2).toString()} KB",
+                            style: TextStyle(color: Colors.grey),
+                          ),*/
+                          leading: Text(
+                              "${fileInfo[index].split("/").last.toString().split(".").last}"),
+                          trailing: listOfUploaded.isEmpty ||
+                                  fileInfo[index] != listOfUploaded[index]
+                              ? IconButton(
+                                  onPressed: () async {
+                                    uploadModel = await CustomHttp.uploadFile(
+                                        fileInfo[index], "robin1");
+                                    // listOfUpload.add(uploadModel);
+                                    setState(() {});
+                                    print(
+                                        "Upload Model: ${uploadModel!.secureUrl}");
+
+                                    setState(() {
+                                      fileInfo[index] = uploadModel!.secureUrl;
+                                      listOfUploaded[index] =
+                                          uploadModel!.secureUrl;
+                                    });
+                                    print("file Info with new link${fileInfo}");
+                                  },
+                                  icon: Icon(Icons.upload_rounded))
+                              : IconButton(
+                                  onPressed: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => DownloadPage(
+                                              downloadLink: fileInfo[index]),
+                                        ));
+                                  },
+                                  icon: Icon(Icons.download)),
                         ),
-                        /* subtitle: Text(
-                    "${fileInfo[index]["size"] / 1000} kb",
-                    style: TextStyle(color: Colors.grey),
-                  ),*/
-                        leading: Image.file(File(fileInfo[index]["path"])),
-                        trailing: IconButton(
-                            onPressed: () async {
-                              await CustomHttp.uploadFile(
-                                  fileInfo[index]["path"], "robin1");
-                              print(fileInfo[index]["path"].toString());
-                            },
-                            icon: Icon(Icons.upload_rounded)),
-                      ),
-                    ),
-                  )
-                : null,
+                      );
+                    })
+                : Text(""),
           ),
         ]),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          // fileInfo.clear();
+          // listOfUploaded.clear();
+          print('list of Uploaded:$listOfUploaded');
+          print('list :$fileInfo');
+          setState(() {});
+        },
       ),
     );
   }
