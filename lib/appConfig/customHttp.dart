@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:uploader_app/Model/uploadModel.dart';
+import 'package:uploader_app/utils/uitils.dart';
 
 class CustomHttp {
   static UploadModel? uploadModel;
@@ -31,6 +32,7 @@ class CustomHttp {
       if (responce.statusCode == 200) {
         uploadModel = UploadModel.fromJson(responce.data);
         print("UploadModel$uploadModel");
+        showMessage("Upload Complete");
         return uploadModel;
       }
     } catch (e) {

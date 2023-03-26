@@ -184,15 +184,15 @@ class _UploadPageState extends State<UploadPage> {
           ),
         ]),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          // fileInfo.clear();
-          // listOfUploaded.clear();
-          print('list of Uploaded:$listOfUploaded');
-          print('list :$fileInfo');
-          setState(() {});
-        },
-      ),
+      // floatingActionButton: FloatingActionButton(
+      //   onPressed: () {
+      //     // fileInfo.clear();
+      //     // listOfUploaded.clear();
+      //     print('list of Uploaded:$listOfUploaded');
+      //     print('list :$fileInfo');
+      //     setState(() {});
+      //   },
+      // ),
     );
   }
 }
